@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlannrWebUI", "PlannrWebUI\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlannrWebAPI", "PlannrWebAPI\PlannrWebAPI.csproj", "{A94C6D1F-34C2-4268-B174-09D5F557B336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedModels", "SharedModels\SharedModels.csproj", "{6576468E-3F47-4D6D-AB40-C46DB8887439}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedModels", "SharedModels\SharedModels.csproj", "{6576468E-3F47-4D6D-AB40-C46DB8887439}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

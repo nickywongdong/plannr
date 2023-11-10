@@ -21,6 +21,10 @@ jobs:
         with:
           dotnet-version: '8.x'
           include-prerelease: true
+          
+      - name: List Current Directory
+        run: |
+          ls -al
 
       - name: Build with dotnet
         run: dotnet build --configuration Release

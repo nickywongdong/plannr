@@ -3,6 +3,10 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App - plannr-prod
 
+permissions:
+  contents: read
+  id-token: write
+
 on:
   push:
     branches:
@@ -16,36 +20,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
-          include-prerelease: true
+          dotnet-quality: 'preview'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Build and publish WebAPI
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}\PlannrWebAPI" Plannr\PlannrWebAPI\PlannrWebAPI.csproj
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Build and publish WebUI
+        run: dotnet build -c Release -o "${{env.DOTNET_ROOT}}\PlannrWebUI" Plannr\PlannrWebUI\PlannrWebUI.csproj
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+      - name: Upload artifacts for deployment job
+        uses: actions/upload-artifact@v2
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: .plannr-app-artifacts
+          path: |
+            ${{env.DOTNET_ROOT}}\PlannrWebAPI
+            ${{env.DOTNET_ROOT}}\PlannrWebUI
 
   deploy:
     runs-on: windows-latest
     needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: .plannr-app-artifacts
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -53,5 +70,4 @@ jobs:
         with:
           app-name: 'plannr-prod'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_841B91AF564244FD90B56CE1A233B54C }}
           package: .

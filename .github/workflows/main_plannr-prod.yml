@@ -40,7 +40,7 @@ jobs:
         run: dotnet build -c Release -o "${{env.DOTNET_ROOT}}\PlannrWebUI" Plannr\PlannrWebUI\PlannrWebUI.csproj
 
       - name: Upload artifacts for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: .plannr-app-artifacts
           path: |

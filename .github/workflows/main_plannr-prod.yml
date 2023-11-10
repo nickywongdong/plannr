@@ -23,10 +23,10 @@ jobs:
           dotnet-quality: 'preview'
 
       - name: Build and publish WebAPI
-        run: dotnet publish -c Release .\Plannr\PlannrWebAPI\PlannrWebAPI.csproj -o ${{env.DOTNET_ROOT}}/PlannrWebAPI
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}\PlannrWebAPI Plannr\PlannrWebAPI\PlannrWebAPI.csproj
 
       - name: Build and publish WebUI
-        run: dotnet build -c Release .\Plannr\PlannrWebUI\PlannrWebUI.csproj -o ${{env.DOTNET_ROOT}}/PlannrWebUI
+        run: dotnet build -c Release -o ${{env.DOTNET_ROOT}}\PlannrWebUI Plannr\PlannrWebUI\PlannrWebUI.csproj
 
       - name: Upload artifacts for deployment job
         uses: actions/upload-artifact@v2

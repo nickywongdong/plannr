@@ -1,0 +1,10 @@
+﻿@page "/session/{SessionId:guid}"
+
+@layout MainLayout
+
+<h1>Unique Session @SessionId</h1>
+
+@code {
+    [Parameter]
+    public Guid SessionId { get; set; }
+}

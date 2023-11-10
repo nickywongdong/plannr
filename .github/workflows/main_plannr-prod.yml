@@ -22,21 +22,19 @@ jobs:
           dotnet-version: '8.x'
           include-prerelease: true
 
-      - name: List Current Directory
-        run: |
-          ls
+      - name: Build and publish WebAPI
+        run: dotnet publish -c Release .\Plannr\PlannrWebAPI\PlannrWebAPI.csproj -o ${{env.DOTNET_ROOT}}/PlannrWebAPI
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Build and publish WebUI
+        run: dotnet build -c Release .\Plannr\PlannerWebUI\PlannerWebUI.csproj -o ${{env.DOTNET_ROOT}}/PlannrWebUI
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+      - name: Upload artifacts for deployment job
+        uses: actions/upload-artifact@v2
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: .plannr-app-artifacts
+          path: |
+            ${{env.DOTNET_ROOT}}/PlannrWebAPI
+            ${{env.DOTNET_ROOT}}/PlannrWebUI
 
   deploy:
     runs-on: windows-latest
@@ -49,7 +47,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: .plannr-app-artifacts
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp

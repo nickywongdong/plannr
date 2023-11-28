@@ -17,6 +17,7 @@ const deleteDate = (dates, selectedDate) => {
 }
 
 const Plannr = ({isEditMode}) => {
+
     //TODO initialize collectiveDates, topDate, userDates with GET request from server
     const [collectiveDates, setCollectiveDates] = useState([])
     const [topDate, setTopDate] = useState()
@@ -54,6 +55,5 @@ const Plannr = ({isEditMode}) => {
         <Calendar tileClassName={tileClassName} onClickDay={onClickDay}/>
     )
 }
-
 
 export default Plannr

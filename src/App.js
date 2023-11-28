@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import PlannrCalendar from './Components/PlannrCalendar'
+import PlannrWrapper from './Components/PlannrWrapper';
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
           Learn React
         </a>
       </header>
-      <PlannrCalendar />
+      <PlannrWrapper />
     </div>
   );
 }

@@ -16,25 +16,29 @@ const deleteDate = (dates, selectedDate) => {
     return dates.filter(date => date.valueOf() !== selectedDate.valueOf())
 }
 
-const Plannr = ({data}) => {
+const Plannr = ({isEditMode}) => {
     //TODO initialize collectiveDates, topDate, userDates with GET request from server
     const [collectiveDates, setCollectiveDates] = useState([])
     const [topDate, setTopDate] = useState()
     const [userDates, setUserDates] = useState([])
 
     const onClickDay = (date, event) => {
-        //for eslint
-        if(!date) {
-            setTopDate(3)
-        }
-        const index = getDateIndex(userDates, date)
-        if (index > -1) {
-            setUserDates(userDates => deleteDate(userDates, date))
-            setCollectiveDates(collectiveDates => deleteDate(collectiveDates, date))
-        }
-        else {
-            setUserDates(userDates => [...userDates, date])
-            setCollectiveDates(setCollectiveDates => [...setCollectiveDates, date])
+        if (isEditMode) {
+            //for eslint
+            if(!date) {
+                setTopDate(3)
+            }
+            const index = getDateIndex(userDates, date)
+            if (index > -1) {
+                setUserDates(userDates => deleteDate(userDates, date))
+                setCollectiveDates(collectiveDates => deleteDate(collectiveDates, date))
+            }
+            else {
+                setUserDates(userDates => [...userDates, date])
+                setCollectiveDates(setCollectiveDates => [...setCollectiveDates, date])
+            }
+        } else {
+            console.log('view Mode')
         }
     }
     const tileClassName = ({activeStartDate, date, view}) => {

@@ -44,19 +44,19 @@ jobs:
         dotnet-version: '8.x'
     - name: Restore dependencies
       run: |
-        cd src
+        cd src\Plannr.Server
         ls -la
         pwd
         dotnet restore
     - name: Build WebAPI
       run: |
-        cd src
+        cd src\Plannr.Server
         ls -la
         pwd
         dotnet build --no-restore
     - name: Test WebAPI
       run: |
-        cd src
+        cd src\Plannr.Server
         ls -la
         pwd
         dotnet test --no-build --verbosity normal

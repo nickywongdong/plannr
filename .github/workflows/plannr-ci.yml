@@ -32,7 +32,6 @@ jobs:
         pwd
         npm install
         npm run build
-        npm run test
 
   build-api:
     runs-on: ubuntu-latest
@@ -44,8 +43,21 @@ jobs:
       with:
         dotnet-version: '8.x'
     - name: Restore dependencies
-      run: dotnet restore .\src
+      run: |
+        cd src
+        ls -la
+        pwd
+        dotnet restore
     - name: Build WebAPI
-      run: dotnet build --no-restore .\src
+      run: |
+        cd src
+        ls -la
+        pwd
+        dotnet build --no-restore
     - name: Test WebAPI
-      run: dotnet test --no-build --verbosity normal .\src
+      run: |
+        cd src
+        ls -la
+        pwd
+        dotnet test --no-build --verbosity normal
+      

@@ -1,7 +1,7 @@
-# This workflow will build a .NET project
+# This workflow will build Plannr, including the .NET Backend Plannr.Server, and React Frontend plannr.client
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: plannr-ci
 
 on:
   push:
@@ -10,8 +10,30 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-ui:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        #node-version: [14.x, 16.x, 18.x] Can be used like this to be triggered for each version
+        node-version: [20.x]
 
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build WebUI
+      run: |
+        cd src/plannr.client
+        ls -la
+        pwd
+        npm install
+        npm run build
+
+  build-api:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,11 +42,22 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.x'
-    - name: CD to Solution
-      run: cd src/
     - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: |
+        cd src/Plannr.Server
+        ls -la
+        pwd
+        dotnet restore
+    - name: Build WebAPI
+      run: |
+        cd src/Plannr.Server
+        ls -la
+        pwd
+        dotnet build --no-restore
+    - name: Test WebAPI
+      run: |
+        cd src/Plannr.Server
+        ls -la
+        pwd
+        dotnet test --no-build --verbosity normal
+      

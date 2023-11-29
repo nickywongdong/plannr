@@ -27,7 +27,7 @@ jobs:
 
     - name: Build WebUI
       run: |
-        cd src/
+        cd src/plannr.client
         ls -la
         pwd
         npm install
@@ -43,17 +43,9 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.x'
-    - name: CD to Solution
-      run: |
-        cd src/
-        ls -la
-        pwd
     - name: Restore dependencies
-      run: |
-        pwd
-        ls -la
-        dotnet restore
+      run: dotnet restore .\src
     - name: Build WebAPI
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore .\src
     - name: Test WebAPI
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal .\src

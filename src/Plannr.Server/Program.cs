@@ -49,4 +49,4 @@ app.UseCors(AllowedSpecificOrigins);
 
 app.UseHttpsRedirection();
 
-app.Run();
+await app.RunAsync();

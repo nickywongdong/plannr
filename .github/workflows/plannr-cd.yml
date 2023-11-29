@@ -37,7 +37,7 @@ jobs:
           cd src/plannr.client
           npm install
           npm run build --if-present --omit=dev
-          mv dist "${{env.DOTNET_ROOT}}\\PlannrWebUI"
+          mv dist "${{env.DOTNET_ROOT}}/PlannrWebUI"
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
@@ -59,7 +59,10 @@ jobs:
   deploy:
     runs-on: windows-latest
     needs: build
-
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3

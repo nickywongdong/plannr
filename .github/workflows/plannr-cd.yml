@@ -25,29 +25,27 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Build and publish WebUI
-        run: |
-          cd src/plannr.client
-          npm install
-          npm run build --if-present --omit=dev
-          mv dist "${{env.DOTNET_ROOT}}/PlannrWebUI"
-
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
           dotnet-quality: 'preview'
 
+      - name: Restore Node packages
+        run: |
+          cd src/plannr.client
+          npm install
+
       - name: Build and publish WebAPI
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}\PlannrWebAPI" src\Plannr.Server\Plannr.Server.csproj
+        run: |
+          dotnet publish -c Release -o "${{env.DOTNET_ROOT}}\out" src\Plannr.Server\Plannr.Server.csproj
 
       - name: Upload artifacts for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .plannr-app-artifacts
           path: |
-            ${{env.DOTNET_ROOT}}\PlannrWebAPI
-            ${{env.DOTNET_ROOT}}\PlannrWebUI
+            ${{env.DOTNET_ROOT}}\out\*
 
   deploy:
     runs-on: windows-latest

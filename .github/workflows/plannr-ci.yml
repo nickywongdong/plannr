@@ -25,6 +25,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: temp - clean node modules
+      run: |
+        rm -rf src/plannr.client/node_modules
+        rm -f src/plannr.client/package-lock.json
+
     - name: Build WebUI
       run: |
         cd src/plannr.client

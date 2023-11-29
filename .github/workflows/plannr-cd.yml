@@ -27,6 +27,18 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Build and publish WebUI
+        run: |
+          cd src/plannr.client
+          npm install
+          npm run build --if-present --omit=dev
+          mv dist "${{env.DOTNET_ROOT}}\\PlannrWebUI"
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
@@ -34,10 +46,7 @@ jobs:
           dotnet-quality: 'preview'
 
       - name: Build and publish WebAPI
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}\PlannrWebAPI" Plannr\PlannrWebAPI\PlannrWebAPI.csproj
-
-      - name: Build and publish WebUI
-        run: dotnet build -c Release -o "${{env.DOTNET_ROOT}}\PlannrWebUI" Plannr\PlannrWebUI\PlannrWebUI.csproj
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}\PlannrWebAPI" src\Plannr.Server\Plannr.Server.csproj
 
       - name: Upload artifacts for deployment job
         uses: actions/upload-artifact@v3

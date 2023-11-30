@@ -1,43 +1,32 @@
-// ColorModeContext.jsx
-import React, { createContext, useContext, useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+// ColorModeContext.js
+import { createContext, useContext, useState } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const ColorModeContext = createContext({ colorMode: () => { } });
+const ColorModeContext = createContext();
+
+export const useColorMode = () => {
+    return useContext(ColorModeContext);
+};
 
 export const ColorModeProvider = ({ children }) => {
-    const [mode, setMode] = useState('light');
-    const colorMode = useMemo(
-        () => ({
-            toggleColorMode: () => {
-                setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-            },
-        }),
-        [],
-    );
+    const [colorMode, setColorMode] = useState('light');
 
-    const theme = useMemo(
-        () =>
-            createTheme({
-                palette: {
-                    mode,
-                },
-            }),
-        [mode],
-    );
+    const toggleColorMode = () => {
+        setColorMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+    };
+
+    // Create Material-UI themes based on colorMode
+    const theme = createTheme({
+        palette: {
+            mode: colorMode,
+        },
+    });
 
     return (
-        <ColorModeContext.Provider value={colorMode}>
+        <ColorModeContext.Provider value={{ colorMode, toggleColorMode }}>
             <ThemeProvider theme={theme}>
                 {children}
             </ThemeProvider>
         </ColorModeContext.Provider>
     );
-};
-
-export const useColorModeContext = () => {
-    const context = useContext(ColorModeContext);
-    if (!context) {
-        throw new Error('useColorModeContext must be used within a ColorModeProvider');
-    }
-    return context;
 };

@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\Components\ModeToggle\" />
+    <Folder Include="src\Components\NavBar\" />
     <Folder Include="src\Components\PlannrCalendar\" />
     <Folder Include="src\Components\PlannrWrapper\" />
   </ItemGroup>
